@@ -9,8 +9,7 @@ const MainLayout = () => {
 
   useEffect(() => {
     const inApp = segments[0] === "(app)";
-
-    console.log("inApp", inApp, loading);
+    
     if (loading) {
       return;
     }
