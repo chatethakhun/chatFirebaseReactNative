@@ -1,22 +1,22 @@
 import React, { useEffect, useState } from "react";
 import {
-  User,
+  User as UserFirebase,
   createUserWithEmailAndPassword,
   onAuthStateChanged,
   signOut,
-  signInWithEmailAndPassword
+  signInWithEmailAndPassword,
 } from "firebase/auth";
 import { auth, db } from "@/firebaseConfig";
 import { doc, setDoc } from "firebase/firestore";
 type AuthResponse = {
   success: boolean;
-  data?: User;
+  data?: UserFirebase;
   error?: string;
 };
 
 
 const AuthContext = React.createContext({
-  user: {},
+  user: {} as UserFirebase,
   isAuthenticated: false,
   loading: true,
   login: (email: string, password: string) => ({}) as AuthResponse,

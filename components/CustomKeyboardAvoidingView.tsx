@@ -13,11 +13,15 @@ export default function CustomKeyboardAvoidingView({
     <KeyboardAvoidingView
       className="flex-1"
       behavior={ios ? "padding" : "height"}
+      keyboardVerticalOffset={90}
     >
       <ScrollView
         className="flex-1"
         bounces={false}
         showsVerticalScrollIndicator={false}
+        contentContainerStyle={{
+          flex: 1,
+        }}
       >
         {children}
       </ScrollView>
