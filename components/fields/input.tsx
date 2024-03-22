@@ -28,6 +28,7 @@ export default function InputField({
         placeholder={placeholder}
         onChangeText={onChangeText}
         secureTextEntry={secureTextEntry}
+        autoCapitalize="none"
       />
     </View>
   );

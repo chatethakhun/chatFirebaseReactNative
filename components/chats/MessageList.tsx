@@ -1,14 +1,22 @@
-import { View, Text } from 'react-native'
-import React from 'react'
+import { View, Text, ScrollView } from "react-native";
+import React, { useEffect } from "react";
+import { useAuth } from "@/contexts/AuthContext";
+import MessageItem from "./MessageItem";
 type MessageListProps = {
-  messages: any[]
-}
+  messages: any[];
+};
 const MessageList = ({ messages }: MessageListProps) => {
+  const { user } = useAuth();
   return (
-    <View>
-      <Text>MessageList</Text>
-    </View>
-  )
-}
+    <ScrollView
+      showsVerticalScrollIndicator={false}
+      contentContainerStyle={{ paddingTop: 10 }}
+    >
+      {messages.map((message, index) => {
+        return <MessageItem message={message} key={index} currentUser={user} />;
+      })}
+    </ScrollView>
+  );
+};
 
-export default MessageList
+export default MessageList;

@@ -29,7 +29,6 @@ export default function LoginPage() {
     const response = await register(email.current, password.current);
 
     if (!response.success) {
-      console.log(response.error);
       if (response.error?.includes("auth/email-already-in-use")) {
         console.error("Email already in use");
       }

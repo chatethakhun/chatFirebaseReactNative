@@ -42,7 +42,7 @@ const ChatRoomHeader = ({ chat }: ChatRoomHeaderProps) => {
                 className="mx-3 text-neutral-700 font-medium"
                 style={{ fontSize: hp(2) }}
               >
-                {"Name"}
+                {chat?.name ?? 'Anonymous'}
               </Text>
             </View>
           </View>

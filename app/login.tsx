@@ -5,6 +5,7 @@ import {
   Pressable,
   KeyboardAvoidingView,
   Platform,
+  Alert,
 } from "react-native";
 import React, { useCallback, useRef } from "react";
 import { StatusBar } from "expo-status-bar";
@@ -34,8 +35,11 @@ export default function LoginPage() {
   const submit = useCallback(async (data: { email: string, password: string}) => {
     const { email, password } = data;
 
-    await login(email, password);
-    // console.log(email.current, password.current);
+    const response = await login(email, password);
+
+    if(response.error){
+      Alert.alert(response.error);
+    }
   }, []);
 
   return (

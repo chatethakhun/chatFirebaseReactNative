@@ -16,7 +16,7 @@ type AuthResponse = {
 
 
 const AuthContext = React.createContext({
-  user: {} as UserFirebase,
+  user: {} as UserFirebase & { userId: string },
   isAuthenticated: false,
   loading: true,
   login: (email: string, password: string) => ({}) as AuthResponse,

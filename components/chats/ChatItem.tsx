@@ -1,12 +1,21 @@
 import { View, Text, TouchableOpacity } from "react-native";
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import { Image } from "expo-image";
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from "react-native-responsive-screen";
 import { useRouter } from "expo-router";
-import { blurhash } from "@/constants/common";
+import { blurhash, getRoomId } from "@/constants/common";
+import {
+  collection,
+  doc,
+  onSnapshot,
+  orderBy,
+  query,
+} from "firebase/firestore";
+import { db } from "@/firebaseConfig";
+import { useAuth } from "@/contexts/AuthContext";
 
 type ChatItemProps = {
   chat: any;
@@ -14,10 +23,34 @@ type ChatItemProps = {
 };
 const ChatItem = ({ chat, noBorder = false }: ChatItemProps) => {
   const router = useRouter();
+  const { user } = useAuth();
+  const [lastestMessage, setLastesMessage] = React.useState(null);
 
   const openChat = () => {
     router.push({ pathname: "/chatRoom", params: chat });
   };
+
+  useEffect(() => {
+    let roomId = getRoomId(user?.uid, chat?.userId);
+    const docRef = doc(db, "rooms", roomId);
+    const messageRef = collection(docRef, "messages");
+    const q = query(messageRef, orderBy("createdAt", "desc"));
+
+    let unsub = onSnapshot(q, (querySnapshot) => {
+      let allMessages = querySnapshot.docs.map((doc) => {
+        return doc.data();
+      });
+
+      setLastesMessage(
+        allMessages[0] ? allMessages[0] : { message: "No message yet" }
+      );
+      // setMessages([...allMessages]);
+    });
+
+    return unsub;
+  }, []);
+
+  console.log(lastestMessage);
 
   return (
     <TouchableOpacity
@@ -46,13 +79,13 @@ const ChatItem = ({ chat, noBorder = false }: ChatItemProps) => {
             style={{ fontSize: hp(1.8) }}
             className="font-semibold text-neutral-800"
           >
-            Name
+            {chat?.name ?? 'Anonymous'}
           </Text>
           <Text
             style={{ fontSize: hp(1.6) }}
             className="font-medium text-neutral-500"
           >
-            Time
+            {lastestMessage?.createdAt?.toDate().toLocaleTimeString()}
           </Text>
         </View>
         <View>
@@ -60,7 +93,7 @@ const ChatItem = ({ chat, noBorder = false }: ChatItemProps) => {
             style={{ fontSize: hp(1.6) }}
             className="font-medium text-neutral-500"
           >
-            Last Message
+            {lastestMessage?.message}
           </Text>
         </View>
       </View>
