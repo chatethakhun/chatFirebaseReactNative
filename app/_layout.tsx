@@ -1,9 +1,8 @@
-import { View } from "@/components/Themed";
 import { AuthContextProvider, useAuth } from "@/contexts/AuthContext";
 import { Slot, useRouter, useSegments } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
-import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
+import { MenuProvider } from "react-native-popup-menu";
 
 const MainLayout = () => {
   const { isAuthenticated, loading } = useAuth();
@@ -27,15 +26,12 @@ const MainLayout = () => {
   return <Slot />;
 };
 const RootLayout = () => (
-  <AuthContextProvider>
-    <View
-      className="flex-1"
-      style={{ paddingTop: hp(4), paddingHorizontal: wp(5) }}
-    >
+  <MenuProvider>
+    <AuthContextProvider>
       <StatusBar style="dark" />
       <MainLayout />
-    </View>
-  </AuthContextProvider>
+    </AuthContextProvider>
+  </MenuProvider>
 );
 
 export default RootLayout;
