@@ -15,7 +15,7 @@ const ChatRoom = () => {
   const [messages, setMessages] = React.useState([]);
 
   return (
-    <CustomKeyboardAvoidingView>
+    <CustomKeyboardAvoidingView inChat>
       <View className="flex-1 bg-white">
         <StatusBar style="dark" />
         <ChatRoomHeader chat={chat} />

@@ -3,25 +3,31 @@ import React from "react";
 
 type CustomKeyboardAvoidingViewProps = {
   children: React.ReactNode;
+  inChat?: boolean;
 };
 
 const ios = Platform.OS === "ios";
 export default function CustomKeyboardAvoidingView({
-  children,
+  children, inChat = false
 }: CustomKeyboardAvoidingViewProps) {
+  let keyConfig = {}
+  let scrollViewConfig = {}
+  if(inChat) {
+    keyConfig = { keyboardVerticalOffset: 90, }
+    scrollViewConfig = { contentContainerStyle: {flex: 1 } }
+  }
+
   return (
     <KeyboardAvoidingView
       className="flex-1"
       behavior={ios ? "padding" : "height"}
-      keyboardVerticalOffset={90}
+      {...keyConfig}
     >
       <ScrollView
         className="flex-1"
         bounces={false}
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{
-          flex: 1,
-        }}
+        {...scrollViewConfig}
       >
         {children}
       </ScrollView>
