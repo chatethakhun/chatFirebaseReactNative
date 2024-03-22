@@ -29,7 +29,18 @@ export default function LoginPage() {
     const response = await register(email.current, password.current);
 
     if (!response.success) {
-      console.error(response.message);
+      console.log(response.error);
+      if (response.error?.includes("auth/email-already-in-use")) {
+        console.error("Email already in use");
+      }
+
+      if (response.error?.includes("auth/weak-password")) {
+        console.error("Password is too weak");
+      }
+
+      if (response.error?.includes("auth/invalid-email")) {
+        console.error("Invalid email");
+      }
     }
   }, []);
 
@@ -71,25 +82,21 @@ export default function LoginPage() {
         </View>
 
         <View
-          style={{
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-          className="justify-center"
+          className="justify-center items-center w-full flex-row gap-1"
         >
           <Text style={{ justifyContent: "center" }}>
-            already have account{" "}
-            <Pressable
-              style={{ justifyContent: "center" }}
-              onPress={() => {
-                router.back();
-              }}
-            >
-              <Text style={{ color: Colors.primary }} className="text-primary">
-                Sign In
-              </Text>
-            </Pressable>
+            Already have account{" "}
           </Text>
+          <Pressable
+            style={{ justifyContent: "center" }}
+            onPress={() => {
+              router.back();
+            }}
+          >
+            <Text style={{ color: Colors.primary }} className="text-primary">
+              Sign In
+            </Text>
+          </Pressable>
         </View>
       </View>
     </CustomKeyboardAvoidingView>

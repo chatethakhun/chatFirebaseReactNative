@@ -6,6 +6,7 @@ type InputFieldProps = {
   icon?: keyof typeof Ionicons.glyphMap;
   onChangeText?: (text: string) => void;
   secureTextEntry?: boolean;
+  value?: string;
 };
 
 export default function InputField({
@@ -13,6 +14,7 @@ export default function InputField({
   icon,
   onChangeText,
   secureTextEntry = false,
+  value,
 }: InputFieldProps) {
   return (
     <View
@@ -22,6 +24,7 @@ export default function InputField({
       {icon && <Ionicons name={icon} size={24} />}
       <TextInput
         className="w-full"
+        value={value}
         placeholder={placeholder}
         onChangeText={onChangeText}
         secureTextEntry={secureTextEntry}

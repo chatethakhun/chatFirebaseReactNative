@@ -17,15 +17,25 @@ import Button from "@/components/button";
 import Colors from "@/constants/Colors";
 import { useRouter } from "expo-router";
 import CustomKeyboardAvoidingView from "@/components/CustomKeyboardAvoidingView";
+import { Controller, useForm } from "react-hook-form";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function LoginPage() {
-  const email = useRef("");
-  const password = useRef("");
+  const { login } = useAuth();
 
   const router = useRouter();
 
-  const submit = useCallback(() => {
-    console.log(email.current, password.current);
+  const {
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm();
+
+  const submit = useCallback(async (data: { email: string, password: string}) => {
+    const { email, password } = data;
+
+    await login(email, password);
+    // console.log(email.current, password.current);
   }, []);
 
   return (
@@ -48,16 +58,32 @@ export default function LoginPage() {
         </View>
 
         <View style={{ gap: 20 }} className="w-full items-center gap-3">
-          <InputField
-            icon="mail"
-            placeholder="Email..."
-            onChangeText={(text) => (email.current = text)}
+          <Controller
+            control={control}
+            name="email"
+            rules={{ required: "Email is required" }}
+            render={({ field: { value, onChange } }) => (
+              <InputField
+                icon="mail"
+                placeholder="Email..."
+                value={value}
+                onChangeText={onChange}
+              />
+            )}
           />
-          <InputField
-            icon="key"
-            placeholder="Password"
-            onChangeText={(text) => (password.current = text)}
-            secureTextEntry
+          <Controller
+            control={control}
+            name="password"
+            rules={{ required: "Email is required" }}
+            render={({ field: { value, onChange } }) => (
+              <InputField
+                icon="key"
+                placeholder="Password"
+                onChangeText={onChange}
+                value={value}
+                secureTextEntry
+              />
+            )}
           />
         </View>
 
@@ -68,7 +94,7 @@ export default function LoginPage() {
         </View>
 
         <View className="w-full">
-          <Button label="Login" onPress={submit} />
+          <Button label="Login" onPress={handleSubmit(submit)} />
         </View>
 
         <View
@@ -78,8 +104,15 @@ export default function LoginPage() {
           }}
           className="justify-center"
         >
-          <Text style={{ justifyContent: "center" }}>
-            Don't have an account?{" "}
+          <View className="flex-row">
+            <Text
+              style={{
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              Don't have an account?{" "}
+            </Text>
             <Pressable
               style={{ justifyContent: "center" }}
               onPress={() => {
@@ -90,7 +123,7 @@ export default function LoginPage() {
                 Sign Up
               </Text>
             </Pressable>
-          </Text>
+          </View>
         </View>
       </View>
     </CustomKeyboardAvoidingView>
