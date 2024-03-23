@@ -7,23 +7,23 @@ import {
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import { auth, db } from "@/firebaseConfig";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, setDoc, updateDoc } from "firebase/firestore";
 type AuthResponse = {
   success: boolean;
   data?: UserFirebase;
   error?: string;
 };
 
-
 const AuthContext = React.createContext({
-  user: {} as UserFirebase & { userId: string },
+  user: { uid: "" } as UserFirebase & { userId: string },
   isAuthenticated: false,
   loading: true,
-  login: (email: string, password: string) => ({}) as AuthResponse,
+  login: (email: string, password: string) => ({} as AuthResponse),
   logOut: () => {},
   register: (email: string, password: string) => {
     return {} as AuthResponse;
   },
+  updateProfile: (data: { name: string; photoURL: string }) => {},
 });
 
 export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({
@@ -77,12 +77,10 @@ export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({
         password
       );
 
-
       await setDoc(doc(db, "users", response.user.uid), {
         email: response.user.email,
         userId: response.user.uid,
       });
-
 
       return {
         success: true,
@@ -96,9 +94,31 @@ export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   };
 
+  const updateProfile = async (data: { name: string; photoURL: string }) => {
+    try {
+      setLoading(true);
+      await updateDoc(doc(db, "users", user?.uid), {
+        name: data.name,
+        photoURL: data.photoURL,
+      });
+
+      setUser({
+        ...user,
+        name: data.name,
+        photoURL: data.photoURL,
+      
+      })
+    } catch (error: any) {
+      return {
+        success: false,
+        error: error.message,
+      };
+    }
+  };
+
   return (
     <AuthContext.Provider
-      value={{ user, isAuthenticated, login, logOut, register, loading }}
+      value={{ user, isAuthenticated, login, logOut, register, loading, updateProfile }}
     >
       {children}
     </AuthContext.Provider>

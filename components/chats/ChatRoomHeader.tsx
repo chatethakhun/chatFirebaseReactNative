@@ -11,6 +11,8 @@ type ChatRoomHeaderProps = {
 const ChatRoomHeader = ({ chat }: ChatRoomHeaderProps) => {
   const router = useRouter();
 
+  console.log({ chat });
+
   const goBack = useCallback(() => {
     router.back();
   }, []);
@@ -28,7 +30,7 @@ const ChatRoomHeader = ({ chat }: ChatRoomHeaderProps) => {
             <View className="flex-row items-center">
               <Image
                 source={
-                  "https://fastly.picsum.photos/id/237/200/300.jpg?hmac=TmmQSbShHz9CdQm0NkEjx1Dyh_Y984R9LpNrpvH2D_U"
+                  chat.photoURL ?? "https://fastly.picsum.photos/id/237/200/300.jpg?hmac=TmmQSbShHz9CdQm0NkEjx1Dyh_Y984R9LpNrpvH2D_U"
                 }
                 style={{
                   height: hp(4.5),

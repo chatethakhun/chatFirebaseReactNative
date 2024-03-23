@@ -16,16 +16,19 @@ import {
 import CustomMenuItem from "./CustomMenuItem";
 import { AntDesign, Feather } from "@expo/vector-icons";
 import { useAuth } from "@/contexts/AuthContext";
+import { useRouter } from "expo-router";
 
 export default function HomeHeader() {
   const { top } = useSafeAreaInsets();
+  const router = useRouter();
+  const { logOut, user } = useAuth();
 
-  const { logOut } = useAuth();
-
-  const handleProfile = useCallback(() => {}, [])
+  const handleProfile = useCallback(() => {
+    router.push({ pathname: "/profile" });
+  }, [])
   const handleSignOut = useCallback(async () => {
     await logOut();
-  }, [])
+  }, [logOut])
   return (
     <View
       style={{ paddingTop: Platform.OS === "ios" ? top : top + 10 }}
@@ -41,7 +44,7 @@ export default function HomeHeader() {
         <MenuTrigger>
           <Image
             style={{ height: hp(4.3), aspectRatio: 1, borderRadius: 100 }}
-            source="https://photos.wi.gcs.trstatic.net/91eH0cy_sdL4W9ERlE17iakSt3L-kfr_ClC-z0xSbVV5X1bKAoXmjEhSUpig2FE_jNBGyknblmiJv2jQ--T87A"
+            source={user.photoURL ?? "https://photos.wi.gcs.trstatic.net/91eH0cy_sdL4W9ERlE17iakSt3L-kfr_ClC-z0xSbVV5X1bKAoXmjEhSUpig2FE_jNBGyknblmiJv2jQ--T87A"}
             transition={100}
             placeholder={blurhash}
             contentFit="cover"

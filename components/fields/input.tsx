@@ -7,6 +7,7 @@ type InputFieldProps = {
   onChangeText?: (text: string) => void;
   secureTextEntry?: boolean;
   value?: string;
+  disabled?: boolean;
 };
 
 export default function InputField({
@@ -15,6 +16,7 @@ export default function InputField({
   onChangeText,
   secureTextEntry = false,
   value,
+  disabled,
 }: InputFieldProps) {
   return (
     <View
@@ -29,6 +31,7 @@ export default function InputField({
         onChangeText={onChangeText}
         secureTextEntry={secureTextEntry}
         autoCapitalize="none"
+        readOnly={disabled}
       />
     </View>
   );

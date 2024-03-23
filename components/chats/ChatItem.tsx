@@ -62,7 +62,7 @@ const ChatItem = ({ chat, noBorder = false }: ChatItemProps) => {
     >
       <Image
         source={
-          "https://fastly.picsum.photos/id/237/200/300.jpg?hmac=TmmQSbShHz9CdQm0NkEjx1Dyh_Y984R9LpNrpvH2D_U"
+          chat.photoURL ?? "https://fastly.picsum.photos/id/237/200/300.jpg?hmac=TmmQSbShHz9CdQm0NkEjx1Dyh_Y984R9LpNrpvH2D_U"
         }
         style={{
           height: hp(6),
